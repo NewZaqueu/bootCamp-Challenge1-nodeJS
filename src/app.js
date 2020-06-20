@@ -12,19 +12,13 @@ function idValidation (request,response,next){
   const {id} = request.params
 
   if (!isUuid(id)){
-
     return response.status(400).json({message: "Incorrect ID format, please review it."})
-
   } else{
-
     const repositoryIndex = repositories.findIndex( repository => repository.id === id)
-
     if (repositoryIndex < 0){
       return response.status(400).json({message: "ID not found, please review it"})
     }
-
     return next()
-    
   }
   
 }
@@ -45,13 +39,14 @@ app.use("/repositories/:id/like",idValidation)
 
 //Rotas
 
-
+//Listar repositórios
 
 app.get("/repositories", (request, response) => {
   return response.json(repositories)
   // TODO
 });
 
+//Criar repositórios
 
 app.post("/repositories", dataValidation, (request, response) => {
   const { title, url, techs } = request.body
@@ -70,6 +65,8 @@ app.post("/repositories", dataValidation, (request, response) => {
 
 });
 
+//Atualizar repositórios
+
 app.put("/repositories/:id", dataValidation, (request, response) => {
   const { id } = request.params
   const { title, url, techs} = request.body
@@ -82,6 +79,8 @@ app.put("/repositories/:id", dataValidation, (request, response) => {
   return response.json(repositories[repositoryIndex])
 });
 
+// Deletar repositórios
+
 app.delete("/repositories/:id", (request, response) => {
   const { id } = request.params
 
@@ -90,6 +89,8 @@ app.delete("/repositories/:id", (request, response) => {
 
   return response.status(204).json({message: "Repository deleted"})
 });
+
+// Curtir repositório
 
 app.post("/repositories/:id/like", (request, response) => {
   const { id } = request.params
@@ -100,8 +101,7 @@ app.post("/repositories/:id/like", (request, response) => {
   repository.likes ++ 
 
   return response.json({
-    title: repository.title,
-    Likes: repository.likes
+    likes: repository.likes
   })
 
 });
